@@ -2,7 +2,7 @@ node{
 
 try{
     
-    def mavenHome = tool name: 'maven3.8.5'
+    def mavenHome = tool name: 'maven3.9.0'
     
     echo "The Job name is: ${env.JOB_NAME}" 
     echo "The Build numebr is: ${env.BUILD_NUMBER}"
