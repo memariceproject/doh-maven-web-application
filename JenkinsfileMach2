@@ -1,0 +1,36 @@
+pipeline{
+    
+agent any
+
+tools{
+ maven "maven3.9.0"
+}
+
+stages{
+    
+stage('GitDownLoad'){
+ steps{
+     git branch: 'development ', credentialsId: 'cf8ad924-8cea-44d8-b4e0-4aaea23b0298', url: 'https://github.com/doh-tech/doh-maven-web-application.git'    
+ }
+ 
+    
+}
+stage('RunTestandBuild'){
+  steps{
+  parallel(
+ RunTest:{
+ sh "mvn clean package"
+ },
+ 
+ Build:{
+ sh "mvn clean package"
+ }
+ )
+ }
+ }
+
+
+
+
+}//stage closing
+}//pipeline closing
