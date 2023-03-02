@@ -8,13 +8,13 @@ try{
     echo "The Build numebr is: ${env.BUILD_NUMBER}"
     echo "The node name is: ${env.NODE_NAME}"
 
-properties([buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '5', daysToKeepStr: '', numToKeepStr: '5')), [$class: 'JobLocalConfiguration', changeReasonComment: ''], pipelineTriggers([pollSCM('* * * * *')])])
+//properties([buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '5', daysToKeepStr: '', numToKeepStr: '5')), [$class: 'JobLocalConfiguration', changeReasonComment: ''], pipelineTriggers([pollSCM('* * * * *')])])
 
 
 //Checkout Code State
 stage('CheckoutCode'){
-sendSlackNotifications("STARTED")
-git branch: 'development', credentialsId: '7c0bd52e-8700-404b-a704-444a4f556b2f', url: 'https://github.com/MithunTechnologiesDevOps/maven-web-application.git'
+//sendSlackNotifications("STARTED")
+git branch: 'development ', credentialsId: 'cf8ad924-8cea-44d8-b4e0-4aaea23b0298', url: 'https://github.com/doh-tech/doh-maven-web-application.git'    
 }
 
 //Build
@@ -50,7 +50,7 @@ sendSlackNotifications(currentBuild.result)
 }
 
 }//node closing
-
+/*
 //Function for slack notifications
 
 def sendSlackNotifications(String buildStatus = 'STARTED') {
@@ -78,7 +78,7 @@ def sendSlackNotifications(String buildStatus = 'STARTED') {
   // Send notifications
   slackSend (color: colorCode, message: summary)
 }
-
+*/
 
 
 
