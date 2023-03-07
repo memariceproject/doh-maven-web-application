@@ -1,0 +1,32 @@
+pipeline{
+    
+    
+    agent any
+    tools{
+        maven 'maven3.9.0'
+    }
+    parameters {
+  choice choices: ['master', 'development', 'stage'], description: 'select the branch name', name: 'branchName'
+  string defaultValue: 'Doh Augustin', description: 'Override the default name', name: 'personlName'
+}
+    
+    stages{
+        
+        stage('Gitcheckout'){
+            steps{
+                   sh "echo the person is: ${params.personlName}"
+         git branch: "${params.branchName}", url: 'https://github.com/doh-tech/doh-maven-web-application.git'    
+            }
+        }
+        //Building The Code
+        stage('Build'){
+            steps{
+                sh "mvn clean package"
+            }
+        }
+
+
+
+        
+}//clossing stages
+}//clossing pipeline
