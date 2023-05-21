@@ -35,9 +35,8 @@ out.println("Server Host Name :: "+inetAddress.getHostName());
 	</span>
 	<span style="font-weight: bold;">
 		Doh Tech, 
-		Laurel, Bowie Road, Beside Briarwood drive ,
+		Laurel, Landover Road, Beside Fedex Field ,
 		Laurel,
-		+2406364161
 		ntomfondon@gmail.com
 		<br>
 		<a href="mailto:ntomfondon@gmail.com">Mail to Doh Tech</a>
