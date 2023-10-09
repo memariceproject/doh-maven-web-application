@@ -1,0 +1,62 @@
+pipeline{
+agent any 
+
+tools{
+maven "maven3.9.5"    
+}
+
+stages{
+
+stage("Gitdownload"){
+steps{
+ sendSlackNotifications("STARTED")   
+ git credentialsId: 'bcb09281-24d7-4d52-9dfc-18037600885b', url: 'https://github.com/doh-tech/doh-maven-web-application.git'   
+}
+}
+stage("Build"){
+steps{
+sh "mvn package"    
+}    
+}
+        
+        
+}//closing stage
+post {
+success {
+ sendSlackNotifications(currentBuild.result)   
+}
+failure {
+
+ sendSlackNotifications(currentBuild.result)   
+   
+}
+}
+
+}//closing pipeline
+
+
+def sendSlackNotifications(String buildStatus = 'STARTED') {
+  // build status of null means successful
+  buildStatus =  buildStatus ?: 'SUCCESSFUL'
+
+  // Default values
+  def colorName = 'RED'
+  def colorCode = '#FF0000'
+  def subject = "${buildStatus}: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'"
+  def summary = "${subject} (${env.BUILD_URL})"
+
+  // Override default values based on build status
+  if (buildStatus == 'STARTED') {
+    colorName = 'YELLOW'
+    colorCode = '#FFFF00'
+  } else if (buildStatus == 'SUCCESSFUL') {
+    colorName = 'GREEN'
+    colorCode = '#00FF00'
+  } else {
+    color = 'RED'
+    colorCode = '#FF0000'
+  }
+
+  // Send notifications
+  slackSend (color: colorCode, message: summary, channel: "#Cvs")
+}
