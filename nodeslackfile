@@ -1,33 +1,52 @@
 properties([buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '5', daysToKeepStr: '', numToKeepStr: '5'))])
 
-node("built-in"){
-try{
+/*pipeline{
+    agent{
+        label "labelname"  #declarative pipeline
+    }
+}
+OR
+node(built-in){    #for scripted pipeline
     
-def mavenHome = tool name: "maven3.9.5"
+    
+}
+*/
+pipeline{
+    
+agent any
 
-    
-stage("GitCheckout"){
-    sendSlackNotifications("STARTED") 
-        
-git branch: 'development', credentialsId: 'bcb09281-24d7-4d52-9dfc-18037600885b', url: 'https://github.com/doh-tech/doh-maven-web-application.git'   
-    
-} 
-
-stage("Build the code"){
-sh "${mavenHome}/bin/mvn clean package"
+tools{
+   maven "maven3.9.5" 
 }
 
-}catch(e){
-    // If there was an exception thrown, the build failed
-    currentBuild.result = "FAILURE"
-    throw e
-}
-finally{
-   sendSlackNotifications(currentBuild.result) 
-}
-}//closing node
+    
 
-def sendSlackNotifications(String buildStatus = 'STARTED') {
+stages{
+    
+    stage("Gidownload"){
+        steps{
+                slacknotification("STARTED")  
+            git credentialsId: '63746750-6704-4c88-a56f-4f98392b74bf', url: 'https://github.com/doh-tech/doh-maven-web-application.git'
+        }
+    }
+    stage("Building the code"){
+        steps{
+            sh "mvn clean package"
+        }
+    }
+}//stages closing
+post {
+  success {
+  slacknotification(currentBuild.result)  
+
+  }
+  failure {
+    slacknotification(currentBuild.result)  
+  }
+}
+    
+}//pipeline closing
+def slacknotification(String buildStatus = 'STARTED') {
   // build status of null means successful
   buildStatus =  buildStatus ?: 'SUCCESSFUL'
 
@@ -50,5 +69,4 @@ def sendSlackNotifications(String buildStatus = 'STARTED') {
   }
 
   // Send notifications
-  slackSend (color: colorCode, message: summary, channel: "#Cvs")
-}
+  slackSend (color: colorCode, message: summary, channel: "#aws-job")
