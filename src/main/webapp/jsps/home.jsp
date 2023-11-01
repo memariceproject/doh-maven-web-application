@@ -41,7 +41,7 @@ out.println("Server Host Name :: "+inetAddress.getHostName());
 		Hyttsville,
 		ntomfondon@gmail.com
 		<br>
-		<a href="mailto:ntomfondon@gmail.com">Mail to Doh Tech</a>
+		<a href="mailto:ntomfondoh@gmail.com">Mail to Doh Tech</a>
 	</span>
 </div>
 <hr>
